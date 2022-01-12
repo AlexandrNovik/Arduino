@@ -19,7 +19,7 @@ void loop() {
 void listenEffectButton() {
   currentEffectButton = debounce(lastEffectButton);
   if (lastEffectButton == LOW && currentEffectButton == HIGH) {
-     incrementMode();
+     setNextEffect();
   }
   lastEffectButton = currentEffectButton;
 }

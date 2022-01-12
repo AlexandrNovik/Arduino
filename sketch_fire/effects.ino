@@ -33,7 +33,7 @@ void setupEffects() {
   effectMode = 0;
 }
 
-void incrementMode() {
+void setNextEffect() {
   effectMode++;
   loadingFlag = true;
   if (effectMode > EFFECTS_COUNT) {
