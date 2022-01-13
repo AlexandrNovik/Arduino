@@ -18,7 +18,7 @@
 #define NUM_LEDS WIDTH * HEIGHT
 #define D_EFFECT_SPEED 80
 #define COLOR_ORDER GRB
-#define BRIGHTNESS 32         // стандартная маскимальная яркость (0-255)
+#define BRIGHTNESS 44         // стандартная маскимальная яркость (0-255)
 
 CRGB leds[NUM_LEDS];
 
@@ -29,6 +29,7 @@ int effectMode = 0;
 int brightnessMode = 0;
 
 int globalBrightness;
+
 void setupEffects() {
   FastLED.addLeds<WS2812, LED_PIN, COLOR_ORDER>(leds, NUM_LEDS);
   loadingFlag = true;
@@ -45,9 +46,9 @@ void setNextEffect() {
 }
 
 void setNextBrightness() {
-  globalBrightness -= 2;
-  if (globalBrightness <= 0) {
-    globalBrightness = BRIGHTNESS;
+  globalBrightness += 4;
+  if (globalBrightness >= BRIGHTNESS) {
+    globalBrightness = 4;
   }
   FastLED.setBrightness(globalBrightness);
 }
