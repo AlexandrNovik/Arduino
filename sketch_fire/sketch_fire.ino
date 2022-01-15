@@ -1,40 +1,44 @@
 #include <FastLED.h>
 
 #define EFFECT_BUTTON_PIN 9
-#define BRIGHTNESS_BUTTON_PIN 11
 
 boolean lastEffectButton = LOW; 
 boolean currentEffectButton = LOW;
 
-boolean lastBrightnessButton = LOW; 
-boolean currentBrightnessButton = LOW;
-
 void setup() {
   pinMode(EFFECT_BUTTON_PIN, INPUT);
-  pinMode(BRIGHTNESS_BUTTON_PIN, INPUT);
   setupEffects();
 }
 
 void loop() {
    listenEffectButton();
-   listenBrightnessButton();
    showEffect();
 }
+
+bool _pressed = false;
+bool _holding = false;
+uint32_t _tmr;
 
 void listenEffectButton() {
   currentEffectButton = debounce(lastEffectButton, EFFECT_BUTTON_PIN);
   if (lastEffectButton == LOW && currentEffectButton == HIGH) {
-     setNextEffect();
+    _pressed = true;
+    _tmr = millis();
   }
-  lastEffectButton = currentEffectButton;
-}
-
-void listenBrightnessButton() {
-  currentBrightnessButton = debounce(lastBrightnessButton, BRIGHTNESS_BUTTON_PIN);
-  if (lastBrightnessButton == LOW && currentBrightnessButton == HIGH) {
+  if (lastEffectButton == HIGH && currentEffectButton == HIGH && _pressed && millis() - _tmr >= 300) {
+      _holding = true;
+     _tmr = millis ();
      setNextBrightness();
   }
-  lastBrightnessButton = currentBrightnessButton;
+  if (lastEffectButton == HIGH && currentEffectButton == LOW) {
+    if (!_holding) {
+      setNextEffect();
+    }
+     _holding = false;
+     _pressed = false;
+     _tmr = millis ();
+  }
+  lastEffectButton = currentEffectButton;
 }
 
 boolean debounce(boolean last, int pin) {
